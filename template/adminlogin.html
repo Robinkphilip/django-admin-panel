@@ -1,0 +1,49 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  </head>
+  
+  <body>
+
+    <div class="container text-center">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-4 mt-4">
+            <h1 class="text-info text-center">Admin</h1>
+
+            {% for message in messages  %}
+            <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+              <strong></strong>{{message}}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+
+            <form action="/adminlogin" method="post"> {% csrf_token %}
+
+              <label class="text-white mt-2">Admin Name</label>
+              <div class="form-group">
+                <input type="text"class="form-control" name="username" placeholder='UserName' Required>
+              </div>
+
+              <label class="text-white mt-3">Password</label>
+              <div class="form-group">
+                <input type="password"class="form-control" name="pass1"  placeholder='Password' Required>
+              </div>
+
+              <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-primary" type="submit">Login</button>
+              </div>
+              
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

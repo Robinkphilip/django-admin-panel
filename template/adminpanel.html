@@ -1,0 +1,139 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock title %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+      body {
+        background-image: url("{% static 'images/main.jpg' %}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">ADMIN-PANEL</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Logout {{request.myadmin}}
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="{% url 'logoutAdmin' %}">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+
+          {% comment %}..................................search........................ {% endcomment %}
+
+            <form class="d-flex" method="get" action="/search" role="search">
+              <input class="form-control me-2" type="search" name="searchname" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+
+          </div>
+        </div>
+      </nav>
+
+      {% block body %}{% endblock body %}
+
+      <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-4">
+                <h2 class="text-white bg-dark text-center p-3">Add user</h2>
+                <br>
+
+                <!--Form for panel-->
+
+                {% for message in messages %}
+                <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                  <strong>{{message}}</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+
+                <form action="/insert" method="post">{% csrf_token %}
+                  <label class="text-white mt">UserName</label>
+                  <div class="form-group">
+                    <input type="text"class="form-control" name="username"  placeholder='firstname' Required>
+                  </div>
+    
+                  <label class="text-white mt-1" >Email</label>
+                  <div class="form-group">
+                    <input type="email" class="form-control" name="email" placeholder='email' Required>
+                  </div>
+    
+                  <label class="text-white mt-1">Password</label>
+                  <div class="form-group">
+                    <input type="password"class="form-control" name="pass1" placeholder='password' Required>
+                  </div>
+    
+                  <label class="text-white mt-1">Confirm Password</label>
+                  <div class="form-group">
+                    <input type="password"class="form-control" name="pass2" placeholder='Confirm password' Required>
+                  </div>
+    
+                  <div class="d-grid gap-2 mt-3">
+                    <button class="btn btn-primary" type="submit">add</button>
+                  </div>
+                </form>
+            </div>
+
+            {% comment %}############################# userdetails ###############################{% endcomment %}
+
+            <div class="col-md-8">
+              <h2 class="text-center text-white bg-dark p-3">User Details</h2>
+
+              {% comment %} {% for message in messages %}
+              <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                <strong>{{message}}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              {% endfor %}
+               {% endcomment %}
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for d in data %}
+
+                  <tr>
+                    <th scope="row">{{d.id}}</th>
+                    <td>{{d.username}}</td>
+                    <td>{{d.email}}</td>
+                    <td><a type="button" href="/update/{{d.id}}" class="btn btn-primary">Edit</a></td>
+                    {% comment %} <td><a type="button" href="/delete/{{d.display_id}}" class="btn btn-danger">Delete</a></td> {% endcomment %}
+                    <td><a type="submit" href="/delete/{{d.id}}" class="btn btn-danger">Delete</a></td>
+                  </tr>
+
+                {% endfor %}
+                </tbody>
+              </table>
+              
+            </div>
+        </div>
+
+
+      </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>
